@@ -58,6 +58,8 @@ public abstract class BaseMvpFragment<D extends BaseViewDelegate, P extends Base
                         throw new RuntimeException("create Delegate error" + e.getMessage());
                   } catch (IllegalAccessException e) {
                         throw new RuntimeException("create Delegate error" + e.getMessage());
+                  } catch (java.lang.InstantiationException e) {
+                        e.printStackTrace();
                   }
 
                   Class<P> pClass = (Class<P>) ptype[1];
@@ -68,6 +70,8 @@ public abstract class BaseMvpFragment<D extends BaseViewDelegate, P extends Base
                   } catch (InstantiationException e) {
                         e.printStackTrace();
                   } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                  } catch (java.lang.InstantiationException e) {
                         e.printStackTrace();
                   }
             }
