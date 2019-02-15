@@ -1,72 +1,28 @@
 apply plugin: 'com.android.application'
 
-def androidConfig = rootProject.ext
-
-
 android {
-    compileSdkVersion androidConfig.sdkVersion
-    buildToolsVersion androidConfig.buildToolsVersion
+    compileSdkVersion 28
     defaultConfig {
-        applicationId androidConfig.applicationId
-        minSdkVersion androidConfig.minSdkVersion
-        targetSdkVersion androidConfig.sdkVersion
-        versionCode androidConfig.versionCode
-        versionName androidConfig.versionName
-
-        multiDexEnabled true
+        applicationId "com.studyhelper.basepro"
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
     }
-
-    //配置keystore签名
-    signingConfigs {
-        release {
-            storeFile file("../key.jks") //放到app的目录下
-            keyAlias "main"   //签名的别名
-            storePassword "abing33642210"     //签名密码
-            keyPassword "abing33642210"       //签名密码
-        }
-    }
-
     buildTypes {
-        debug {
-            def isRelease = androidConfig.isRelease
-            minifyEnabled isRelease
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            if (isRelease) {
-                // 移除无用的resource文件
-                shrinkResources true
-            }
-            signingConfig signingConfigs.release
-        }
         release {
-            // 移除无用的resource文件
-            shrinkResources true
-
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs', 'src/main/jniLibs']
-            if (androidConfig.isRelease) {
-                manifest.srcFile("src/main/release/AndroidManifest.xml")
-                //release模式下排除debug文件夹中所有Java文件
-                java {
-                    exclude 'debug/**'
-                }
-            } else {
-                manifest.srcFile("src/main/debug/AndroidManifest.xml")
-            }
-        }
-    }
-//    if (androidConfig.sdkVersion>22) {
-//         useLibrary 'org.apache.http.legacy'
-//    }
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
-    implementation 'com.android.support:multidex:1.0.3'
-    implementation project(':CommonLib')
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation project(':BaseLib')
 }

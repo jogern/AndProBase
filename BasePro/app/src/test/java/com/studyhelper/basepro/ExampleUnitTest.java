@@ -1,4 +1,4 @@
-package com.studyhelper.test;
+package com.studyhelper.basepro;
 
 import org.junit.Test;
 

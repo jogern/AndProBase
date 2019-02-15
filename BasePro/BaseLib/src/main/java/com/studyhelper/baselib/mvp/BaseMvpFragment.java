@@ -54,7 +54,7 @@ public abstract class BaseMvpFragment<D extends BaseViewDelegate, P extends Base
                   try {
                         mDelegate = dClass.newInstance();
                         mDelegate.setActivity(getBaseActivity());
-                  } catch (java.lang.InstantiationException e) {
+                  } catch (InstantiationException e) {
                         throw new RuntimeException("create Delegate error" + e.getMessage());
                   } catch (IllegalAccessException e) {
                         throw new RuntimeException("create Delegate error" + e.getMessage());
@@ -65,7 +65,7 @@ public abstract class BaseMvpFragment<D extends BaseViewDelegate, P extends Base
                         mPresenter = pClass.newInstance();
                         mPresenter.attachDelegate(mDelegate);
                         return;
-                  } catch (java.lang.InstantiationException e) {
+                  } catch (InstantiationException e) {
                         e.printStackTrace();
                   } catch (IllegalAccessException e) {
                         e.printStackTrace();
