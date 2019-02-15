@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
-
+def VersionName="1.0.2"
 android {
-    compileSdkVersion 25
+    compileSdkVersion 28
     defaultConfig {
 //        minSdkVersion 14
 //        targetSdkVersion 25
         versionCode 1
-        versionName "1.0.2"
+        versionName VersionName
 
     }
 
@@ -16,12 +16,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+//    //自动生成指定名称的release发布版的 apk文件
+//    android.applicationVariants.all { variant ->
+//        variant.outputs.all { output ->
+//            outputFileName = "BaseLib_V" + VersionName +  ".aar"
+//        }
+//    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:25.3.1'
-    implementation 'com.android.support:recyclerview-v7:25.3.1'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
 
 }
