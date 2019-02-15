@@ -23,7 +23,7 @@ public abstract class BaseActivity extends BaseInitialActivity {
       protected void addFragmentInStack(@Nullable Fragment fragment) {
             if (fragment != null) {
                   FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                  ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                 // ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                   String tag = fragment.getClass().getName();
                   ft.replace(mFragmentContainerId, fragment, tag).addToBackStack(tag).commitAllowingStateLoss();
             }
@@ -33,7 +33,7 @@ public abstract class BaseActivity extends BaseInitialActivity {
       protected void addFragmentInContainer(@Nullable Fragment fragment) {
             if (fragment != null) {
                   FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                  ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                 // ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                   String tag = fragment.getClass().getName();
                   ft.replace(mFragmentContainerId, fragment, tag).commitAllowingStateLoss();
             }
