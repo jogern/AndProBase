@@ -7,9 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.studyhelper.baselib.mvp.presenter.BasePresenter;
-import com.studyhelper.baselib.mvp.view.BaseViewDelegate;
 import com.studyhelper.baselib.ui.BaseFragment;
+import com.studyhelper.baselib.util.ClassUtil;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -45,54 +44,23 @@ public abstract class BaseMvpFragment<D extends BaseViewDelegate, P extends Base
                   // 返回表示此类型实际类型参数的Type对象的数组.
                   // 当有多个泛型类时，数组的长度就不是1了
                   Type[] ptype = ((ParameterizedType) type).getActualTypeArguments();
-                  //return (Class) ptype[0];  //将第一个泛型T对应的类返回（这里只有一个）
-
-                  if (ptype.length < 2) {
-                        throw new RuntimeException("create Delegate error len < 2");
-                  }
-                  Class<D> dClass = (Class<D>) ptype[0];
+                  Class<D> dClass = ClassUtil.getClass(ptype,BaseViewDelegate.class);
                   try {
                         mDelegate = dClass.newInstance();
                         mDelegate.setActivity(getBaseActivity());
-                  } catch (InstantiationException e) {
+                  } catch (Exception e) {
                         throw new RuntimeException("create Delegate error" + e.getMessage());
-                  } catch (IllegalAccessException e) {
-                        throw new RuntimeException("create Delegate error" + e.getMessage());
-                  } catch (java.lang.InstantiationException e) {
-                        e.printStackTrace();
                   }
 
-                  Class<P> pClass = (Class<P>) ptype[1];
+                  Class<P> pClass = ClassUtil.getClass(ptype,BasePresenter.class);
                   try {
                         mPresenter = pClass.newInstance();
                         mPresenter.attachDelegate(mDelegate);
                         return;
-                  } catch (InstantiationException e) {
-                        e.printStackTrace();
-                  } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                  } catch (java.lang.InstantiationException e) {
+                  } catch (Exception e) {
                         e.printStackTrace();
                   }
             }
-
-
-//            try {
-//                  mDelegate = delegateClass().newInstance();
-//            } catch (java.lang.InstantiationException e) {
-//                  throw new RuntimeException("create Delegate error" + e.getMessage());
-//            } catch (IllegalAccessException e) {
-//                  throw new RuntimeException("create Delegate error" + e.getMessage());
-//            }
-//            try {
-//                  mPresenter = presenterClass().newInstance();
-//                  mPresenter.attachDelegate(mDelegate);
-//                  return;
-//            } catch (java.lang.InstantiationException e) {
-//                  e.printStackTrace();
-//            } catch (IllegalAccessException e) {
-//                  e.printStackTrace();
-//            }
             throw new RuntimeException("create Preseter error");
       }
 
@@ -104,6 +72,7 @@ public abstract class BaseMvpFragment<D extends BaseViewDelegate, P extends Base
             }
       }
 
+
       @Override
       protected final View onInflaterView(LayoutInflater inflater, ViewGroup container) {
             mDelegate.create(inflater, container);
@@ -113,6 +82,13 @@ public abstract class BaseMvpFragment<D extends BaseViewDelegate, P extends Base
       @Override
       protected void onViewCreated(@Nullable Bundle savedInstanceState) {
             mDelegate.onViewCreated(savedInstanceState);
+            mPresenter.onCreated();
+      }
+
+      @Override
+      public void onDestroyView() {
+            super.onDestroyView();
+            mPresenter.onDestroy();
       }
 
       @Override

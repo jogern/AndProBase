@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-def VersionName="1.0.2"
+def VersionName="1.0.6"
 android {
     compileSdkVersion 28
     defaultConfig {

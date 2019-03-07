@@ -13,8 +13,6 @@ import java.util.List;
 public class Logcat {
 
       private static final String  FORMAT       = ": %s: %s/ L";
-      /** 是否允许打印log */
-      private static final boolean IS_ALLOW_LOG = true;
       /** stackTrace 的固定下标 */
       private static final int     FIXED_INDEX  = 4;
       /** 每行字数 */
@@ -26,41 +24,45 @@ public class Logcat {
 
       private Logcat() { }
 
+      private static int allow_level = Log.DEBUG;
+
+      public static void printfLevel(int level){
+            allow_level=level;
+      }
+
       public static void initForApp(String tagPrefix) {
             TAG_PREFIX = tagPrefix;
             TAG_FORMAT = TAG_PREFIX + FORMAT;
       }
 
       public static void v(String msg) {
-            if (!IS_ALLOW_LOG) {
-                  return;
+            if (allow_level <= Log.VERBOSE) {
+                  printf(Log.VERBOSE, generateTagAndMsg(msg));
             }
-            printf(Log.VERBOSE, generateTagAndMsg(msg));
       }
 
       public static void d(String msg) {
-            i(msg);
+            if (allow_level<=Log.DEBUG) {
+                  i(msg);
+            }
       }
 
       public static void i(String msg) {
-            if (!IS_ALLOW_LOG) {
-                  return;
+            if (allow_level <= Log.INFO) {
+                  printf(Log.INFO, generateTagAndMsg(msg));
             }
-            printf(Log.INFO, generateTagAndMsg(msg));
       }
 
       public static void w(String msg) {
-            if (!IS_ALLOW_LOG) {
-                  return;
+            if (allow_level <= Log.WARN) {
+                  printf(Log.WARN, generateTagAndMsg(msg));
             }
-            printf(Log.WARN, generateTagAndMsg(msg));
       }
 
       public static void e(String msg) {
-            if (!IS_ALLOW_LOG) {
-                  return;
+            if (allow_level<=Log.ERROR) {
+                  printf(Log.ERROR, generateTagAndMsg(msg));
             }
-            printf(Log.ERROR, generateTagAndMsg(msg));
       }
 
       public static void logD(String msg) {

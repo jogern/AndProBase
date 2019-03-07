@@ -1,4 +1,4 @@
-package com.studyhelper.baselib.mvp.view;
+package com.studyhelper.baselib.mvp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,7 +11,9 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.studyhelper.baselib.ui.BaseActivity;
@@ -24,7 +26,7 @@ import java.util.UUID;
  * Create on 2018/10/9.
  * @author jogern
  */
-public abstract class BaseViewDelegate implements IViewDelegate {
+public abstract   class BaseViewDelegate {
 
       private static final int    WHAT_SHOW_DIALOG    = 0x64;
       private static final int    WHAT_DISMISS_DIALOG = 0x65;
@@ -39,8 +41,11 @@ public abstract class BaseViewDelegate implements IViewDelegate {
             public void handleMessage(Message msg) {
                   if (msg.what == WHAT_SHOW_DIALOG) {
                         Bundle bundle = msg.getData();
-                        String dialogId = bundle == null ? null : bundle.getString(KEY_DIALOG_ID);
-                        if (TextUtils.isEmpty(dialogId)) {
+                        if (bundle==null){
+                              return;
+                        }
+                        String dialogId = bundle.getString(KEY_DIALOG_ID);
+                        if (dialogId == null || TextUtils.isEmpty(dialogId)) {
                               return;
                         }
                         AlertDialog dialog = mDialogS.get(dialogId);
@@ -71,6 +76,18 @@ public abstract class BaseViewDelegate implements IViewDelegate {
 
       private BaseActivity mBaseMvpActivity;
       private View         mRootView;
+
+      /**
+       * 加载View
+       * @param inflater
+       * @param container
+       */
+      protected abstract void create(LayoutInflater inflater, ViewGroup container);
+
+      /**
+       * 初始化控件
+       */
+      protected   void initialView(){}
 
       public void onViewCreated(@Nullable Bundle savedInstanceState) {}
 

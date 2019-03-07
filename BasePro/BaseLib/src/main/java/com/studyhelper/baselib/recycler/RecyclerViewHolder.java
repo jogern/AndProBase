@@ -52,8 +52,8 @@ public abstract class RecyclerViewHolder<A extends BaseRecyclerItemAdapter> {
        * @param id 控件的Id
        * @return 控件（View）
        */
-      protected View findViewById(@IdRes int id) {
-            return mHolder.findViewById(id);
+      protected <T extends View> T findViewById(@IdRes int id) {
+            return (T) mHolder.findViewById(id);
       }
 
       /**

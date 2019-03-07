@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.studyhelper.baselib.mvp.presenter.BasePresenter;
-import com.studyhelper.baselib.mvp.view.BaseViewDelegate;
+import com.studyhelper.baselib.Logcat;
 import com.studyhelper.baselib.ui.BaseActivity;
+import com.studyhelper.baselib.util.ClassUtil;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -33,37 +33,30 @@ public abstract class BaseMvpActivity<D extends BaseViewDelegate, P extends Base
       private void createDelegate() {
             //返回表示此 Class 所表示的实体类的 直接父类 的 Type。注意，是直接父类
             //这里type结果是 com.dfsj.generic.GetInstanceUtil<com.dfsj.generic.User>
-            Type type = getClass().getGenericSuperclass();
+            //Logcat.logD("class: "+this.getClass().getName());
+            Type type = this.getClass().getGenericSuperclass();
             // 判断 是否泛型
             if (type instanceof ParameterizedType) {
                   // 返回表示此类型实际类型参数的Type对象的数组.
                   // 当有多个泛型类时，数组的长度就不是1了
                   Type[] ptype = ((ParameterizedType) type).getActualTypeArguments();
                   //return (Class) ptype[0];  //将第一个泛型T对应的类返回（这里只有一个）
-
-                  if (ptype.length < 2) {
-                        throw new RuntimeException("create Delegate error len < 2");
-                  }
-                  Class<D> dClass = (Class<D>) ptype[0];
+                  Class<D> dClass = ClassUtil.getClass(ptype, BaseViewDelegate.class);
                   try {
                         mDelegate = dClass.newInstance();
                         mDelegate.setActivity(this);
-                  } catch (InstantiationException e) {
-                        throw new RuntimeException("create Delegate error" + e.getMessage());
-                  } catch (IllegalAccessException e) {
+                  } catch (Exception e) {
                         throw new RuntimeException("create Delegate error" + e.getMessage());
                   }
 
-                  Class<P> pClass = (Class<P>) ptype[1];
+                  Class<P> pClass = ClassUtil.getClass(ptype,BasePresenter.class);
                   try {
                         mPresenter = pClass.newInstance();
                         mPresenter.attachDelegate(mDelegate);
                         onDelegateCreated();
                         return;
-                  } catch (InstantiationException e) {
-                        e.printStackTrace();
-                  } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                  } catch (Exception e) {
+                       Logcat.e(e);
                   }
             }
             throw new RuntimeException("create Preseter error");
@@ -85,6 +78,7 @@ public abstract class BaseMvpActivity<D extends BaseViewDelegate, P extends Base
             setContentView(mDelegate.getRootView());
             mDelegate.initialView();
             mDelegate.onViewCreated(savedInstanceState);
+            mPresenter.onCreated();
             initialView();
       }
 
@@ -100,5 +94,11 @@ public abstract class BaseMvpActivity<D extends BaseViewDelegate, P extends Base
             if (mDelegate == null) {
                   createDelegate();
             }
+      }
+
+      @Override
+      protected void onDestroy() {
+            super.onDestroy();
+            getPresenter().onDestroy();
       }
 }
