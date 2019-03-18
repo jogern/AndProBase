@@ -64,15 +64,15 @@ public class Logcat {
       }
 
       public static void logD(String msg) {
-            Log.i(getThrowableTag(), msg);
+            Log.i(TAG_PREFIX, getThrowableTag() + msg);
       }
 
       public static void logW(String msg) {
-            Log.e(getThrowableTag(), msg);
+            Log.e(TAG_PREFIX, getThrowableTag() + msg);
       }
 
       public static void logE(String msg) {
-            Log.e(getThrowableTag(), msg);
+            Log.e(TAG_PREFIX, getThrowableTag() + msg);
       }
 
       public static void e(Throwable e) {
