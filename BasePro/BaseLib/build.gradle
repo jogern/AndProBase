@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
-def VersionName="1.0.6"
+def VersionName="1.0.7"
 android {
     compileSdkVersion 28
     defaultConfig {
-//        minSdkVersion 14
+        minSdkVersion 14
 //        targetSdkVersion 25
-        versionCode 1
+        versionCode 2
         versionName VersionName
 
     }
@@ -16,10 +16,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 //    //自动生成指定名称的release发布版的 apk文件
 //    android.applicationVariants.all { variant ->
+//        def name="BaseLib_V" + VersionName
+//
 //        variant.outputs.all { output ->
-//            outputFileName = "BaseLib_V" + VersionName +  ".aar"
+//            outputFileName = name+  ".aar"
 //        }
 //    }
 }

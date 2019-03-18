@@ -26,7 +26,7 @@ import java.util.UUID;
  * Create on 2018/10/9.
  * @author jogern
  */
-public abstract   class BaseViewDelegate {
+public abstract class BaseViewDelegate {
 
       private static final int    WHAT_SHOW_DIALOG    = 0x64;
       private static final int    WHAT_DISMISS_DIALOG = 0x65;
@@ -41,7 +41,7 @@ public abstract   class BaseViewDelegate {
             public void handleMessage(Message msg) {
                   if (msg.what == WHAT_SHOW_DIALOG) {
                         Bundle bundle = msg.getData();
-                        if (bundle==null){
+                        if (bundle == null) {
                               return;
                         }
                         String dialogId = bundle.getString(KEY_DIALOG_ID);
@@ -75,6 +75,7 @@ public abstract   class BaseViewDelegate {
       };
 
       private BaseActivity mBaseMvpActivity;
+      private OnDelegate   mOnDelegate;
       private View         mRootView;
 
       /**
@@ -84,10 +85,15 @@ public abstract   class BaseViewDelegate {
        */
       protected abstract void create(LayoutInflater inflater, ViewGroup container);
 
+
+      protected <P extends BasePresenter> P getPresenter() {
+            return mOnDelegate.getPresenter();
+      }
+
       /**
        * 初始化控件
        */
-      protected   void initialView(){}
+      protected void initialView() {}
 
       public void onViewCreated(@Nullable Bundle savedInstanceState) {}
 
@@ -148,12 +154,13 @@ public abstract   class BaseViewDelegate {
             mHandler.obtainMessage(WHAT_DISMISS_DIALOG, dialogId).sendToTarget();
       }
 
-      public void handerPost(Runnable runnable){
+      public void handerPost(Runnable runnable) {
             mHandler.post(runnable);
       }
 
-      public void setActivity(BaseActivity activity) {
+      void setActivity(BaseActivity activity, OnDelegate onDelegate) {
             mBaseMvpActivity = activity;
+            mOnDelegate = onDelegate;
       }
 
       protected Activity getBaseActivity() {

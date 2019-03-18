@@ -18,7 +18,7 @@ import java.lang.reflect.Type;
  * @author jogern
  */
 public abstract class BaseMvpFragment<D extends BaseViewDelegate, P extends BasePresenter<D>> extends
-        BaseFragment {
+        BaseFragment implements OnDelegate{
 
       private D mDelegate;
       private P mPresenter;
@@ -31,6 +31,8 @@ public abstract class BaseMvpFragment<D extends BaseViewDelegate, P extends Base
             return mDelegate;
       }
 
+
+      @Override
       public P getPresenter() {
             return mPresenter;
       }
@@ -47,7 +49,6 @@ public abstract class BaseMvpFragment<D extends BaseViewDelegate, P extends Base
                   Class<D> dClass = ClassUtil.getClass(ptype,BaseViewDelegate.class);
                   try {
                         mDelegate = dClass.newInstance();
-                        mDelegate.setActivity(getBaseActivity());
                   } catch (Exception e) {
                         throw new RuntimeException("create Delegate error" + e.getMessage());
                   }
@@ -55,6 +56,7 @@ public abstract class BaseMvpFragment<D extends BaseViewDelegate, P extends Base
                   Class<P> pClass = ClassUtil.getClass(ptype,BasePresenter.class);
                   try {
                         mPresenter = pClass.newInstance();
+                        mDelegate.setActivity(getBaseActivity(),this);
                         mPresenter.attachDelegate(mDelegate);
                         return;
                   } catch (Exception e) {
